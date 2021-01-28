@@ -2,9 +2,9 @@
   <div class="card_product_content">
     <img class="product_img" :src="prevImg" :alt="product.title" />
     <div class="product_container">
-      <p>Title: {{ product.title }}</p>
-      <p>Price: {{ product.price }}</p>
-      <p>
+      <p class="p_margin">Title: {{ product.title }}</p>
+      <p class="p_margin_center">Price: {{ product.price }}</p>
+      <p class="p_margin p_description">
         <span class="description">Description:</span>
         {{ product.description }}
       </p>
@@ -34,7 +34,7 @@ export default {
   computed: {
     isAuth() {
       return userStore.getters.isAuth;
-    }
+    },
   },
   mounted() {
     let binary = "";
@@ -51,27 +51,22 @@ export default {
         price: prod.price,
         description: prod.description,
         img: this.prevImg,
-        count: 0,
+        quantity: 1,
       };
-      if (!store.order.length) {
-        store.order.push({ id: prod.id, count: 0 });
-        store.products.push(product);
-      }
       let newProduct = true;
       store.products.forEach((el) => {
-        newProduct = true;
         if (el.id === product.id) {
-          el.count += 1;
+          el.quantity += 1;
           newProduct = false;
         }
       });
       store.order.forEach((ord) => {
         if (ord.id === product.id) {
-          ord.count += 1;
+          ord.quantity += 1;
         }
       });
       if (newProduct) {
-        store.order.push({ id: prod.id, count: 1 });
+        store.order.push({ id: prod.id, quantity: 1 });
         store.products.push(product);
       }
     },
@@ -85,9 +80,16 @@ export default {
   max-width: 24%;
   margin: 0 0.3%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
+}
+
+.product_container {
+  display: flex;
+  max-height: 50%;
+  flex-direction: column;
+  align-items: center;
 }
 
 .product_img {
@@ -96,5 +98,19 @@ export default {
 
 .description {
   display: block;
+}
+
+.p_description {
+  overflow: auto;
+  max-height: 4rem;
+  max-width: 13rem;
+}
+
+.p_margin {
+  margin: 0;
+}
+
+.p_margin_center {
+  margin: 3% 0;
 }
 </style>

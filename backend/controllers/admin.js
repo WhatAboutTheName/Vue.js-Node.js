@@ -9,7 +9,7 @@ exports.addProduct = (req, res, next) => {
             description: req.body.description,
             img: image + "/images/" + req['file'].filename
         })
-        .then(result => {
+        .then(_ => {
             res.status(200).json({
                 message: 'Product created successfully.'
             });

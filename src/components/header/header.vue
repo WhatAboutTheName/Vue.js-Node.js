@@ -4,7 +4,7 @@
       <li>
         <router-link to="/">Products</router-link>
       </li>
-      <li v-if="isAuth">
+      <li v-if="isAuth && isAdmin">
         <router-link to="/create-product">Create product</router-link>
       </li>
       <li v-if="isAuth">
@@ -24,16 +24,18 @@
 </template>
 
 <script>
-import userStore from '@/store/user-store';
+import userStore from "@/store/user-store";
 
 export default {
-  userStore,
   computed: {
     isAuth() {
       return userStore.getters.isAuth;
-    }
-  }
-}
+    },
+    isAdmin() {
+      return userStore.getters.isAdmin;
+    },
+  },
+};
 </script>
 
 <style scoped>

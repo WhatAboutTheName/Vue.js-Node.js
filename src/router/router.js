@@ -14,21 +14,14 @@ const router = createRouter({
         {
             path: '/',
             name: 'main',
-            component: Main,
-            beforeEnter: (to, from, next) => {
-                if(userStore.getters.isAuth) {
-                    next();
-                } else {
-                    next(false);
-                }
-            }
+            component: Main
         },
         {
             path: '/create-product',
             name: 'create-product',
             component: CreateProduct,
             beforeEnter: (to, from, next) => {
-                if(userStore.getters.isAuth || userStore.getters.isAdmin) {
+                if(userStore.getters.isAuth && userStore.getters.isAdmin) {
                     next();
                 } else {
                     next(false);

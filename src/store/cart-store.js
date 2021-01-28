@@ -10,6 +10,15 @@ const cartStore = createStore({
   getters: {
     getProducts: state => {
       return state.products;
+    },
+    getOrder: state => {
+      return state.order;
+    }
+  },
+  mutations: {
+    zero(state) {
+      state.products = [];
+      state.order = [];
     }
   }
 })

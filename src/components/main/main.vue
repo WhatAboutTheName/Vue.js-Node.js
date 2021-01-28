@@ -1,10 +1,13 @@
 <template>
-  <ProductTemplate v-for="product in products" :product="product" :key="product.id" />
+  <div class="container">
+    <ProductTemplate v-for="product in products" :product="product" :key="product.id" />
+  </div>
 </template>
 
 <script>
+import { defineAsyncComponent } from "vue";
 import axios from "axios";
-import ProductTemplate from "./product-template";
+const ProductTemplate = defineAsyncComponent(() => import("./product-template"));
 
 export default {
   data() {
@@ -26,4 +29,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.container {
+  display: flex;
+}
+</style>

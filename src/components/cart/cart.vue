@@ -13,8 +13,11 @@
 </template>
 
 <script>
+import axios from "axios";
+import { defineAsyncComponent } from "vue";
 import cartStore from "@/store/cart-store";
-import ProductTemplate from "./product-template";
+import userStore from "@/store/user-store";
+const ProductTemplate = defineAsyncComponent(() => import("./product-template"));
 
 export default {
   components: {
@@ -22,18 +25,32 @@ export default {
   },
   data() {
     return {
-      allProductSum: 0
-    }
+      allProductSum: 0,
+    };
   },
   computed: {
     allPrice() {
-      cartStore.getters.getProducts.forEach(el => {
-        this.allProductSum += el.price * el.count;
-      })
+      cartStore.getters.getProducts.forEach((el) => {
+        this.allProductSum += el.price * el.quantity;
+      });
       return this.allProductSum;
     },
     products() {
       return cartStore.getters.getProducts;
+    },
+  },
+  methods: {
+    async orderAccept() {
+      try {
+        await axios.post("/user/post-order", {
+          data: cartStore.getters.getOrder,
+          email: userStore.state.email,
+        });
+        cartStore.commit('zero');
+        this.allProductSum = 0;
+      } catch (err) {
+        console.error(err);
+      }
     },
   },
 };
@@ -43,6 +60,7 @@ export default {
 .container {
   display: flex;
   flex-direction: row-reverse;
-  justify-content: center;
+  justify-content: flex-end;
+  margin: 0 2%;
 }
 </style>

@@ -46,6 +46,7 @@ export default {
         data.append("description", this.description);
         data.append("image", this.postImg, this.title);
         await axios.post("/admin/addProduct", data);
+        this.$router.push({ path: '/' });
       } catch (err) {
         console.error(err);
       }

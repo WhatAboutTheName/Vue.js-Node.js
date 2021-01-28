@@ -42,6 +42,7 @@ export default {
           password: this.password,
           phoneNumber: this.phoneNumber,
         });
+        this.$router.push({ path: '/log-in' });
       } catch (err) {
         console.error(err);
       }

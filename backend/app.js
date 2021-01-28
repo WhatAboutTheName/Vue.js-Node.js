@@ -5,6 +5,10 @@ const sequelize = require('./util/database');
 const authRoutes = require('./routers/auth');
 const adminRoutes = require('./routers/admin');
 const userRoutes = require('./routers/user');
+const User = require('./models/user');
+const Product = require('./models/product');
+const Order = require('./models/order');
+const OrderItems = require('./models/order-items');
 
 const app = express();
 
@@ -28,6 +32,10 @@ app.use((req, res, next) => {
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
 app.use('/user', userRoutes);
+
+Order.belongsToMany(Product, { through: OrderItems });
+User.hasMany(Order);
+Order.belongsTo(User);
 
 sequelize
     .sync()

@@ -17,40 +17,51 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
 export default {
-  data() {
-    return {
-      title: "",
-      price: "",
-      description: "",
-      prevImg: "",
-      postImg: "",
-    };
-  },
-  methods: {
-    filePicker(event) {
+  setup() {
+    const title = ref("");
+    const price = ref("");
+    const description = ref("");
+    const prevImg = ref("");
+    const postImg = ref("");
+    const router = useRouter();
+
+    const filePicker = (event) => {
       const reader = new FileReader();
-      this.postImg = event.target.files[0];
+      postImg.value = event.target.files[0];
       reader.onload = () => {
-        this.prevImg = reader.result;
+        prevImg.value = reader.result;
       };
       reader.readAsDataURL(event.target.files[0]);
-    },
-    async createProduct() {
+    };
+
+    const createProduct = async () => {
       try {
         const data = new FormData();
-        data.append("title", this.title);
-        data.append("price", this.price);
-        data.append("description", this.description);
-        data.append("image", this.postImg, this.title);
+        data.append("title", title.value);
+        data.append("price", price.value);
+        data.append("description", description.value);
+        data.append("image", postImg.value, title.value);
         await axios.post("/admin/addProduct", data);
-        this.$router.push({ path: '/' });
+        router.push({ path: "/" });
       } catch (err) {
         console.error(err);
       }
-    },
+    };
+
+    return {
+      title,
+      price,
+      description,
+      prevImg,
+      postImg,
+      filePicker,
+      createProduct,
+    };
   },
 };
 </script>

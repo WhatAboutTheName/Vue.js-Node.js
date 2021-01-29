@@ -22,31 +22,39 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 import axios from "axios";
 
 export default {
-  data() {
-    return {
-      name: "",
-      email: "",
-      password: "",
-      phoneNumber: "",
-    };
-  },
-  methods: {
-    async signUp() {
+  setup() {
+    const name = ref("");
+    const email = ref("");
+    const password = ref("");
+    const phoneNumber = ref("");
+    const router = useRouter();
+
+    const signUp = async () => {
       try {
         await axios.post("/auth/sign-up", {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          phoneNumber: this.phoneNumber,
+          name: name.value,
+          email: email.value,
+          password: password.value,
+          phoneNumber: phoneNumber.value,
         });
-        this.$router.push({ path: '/log-in' });
+        router.push({ path: "/log-in" });
       } catch (err) {
         console.error(err);
       }
-    },
+    };
+
+    return {
+      name,
+      email,
+      password,
+      phoneNumber,
+      signUp,
+    };
   },
 };
 </script>

@@ -11,23 +11,23 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 import userStore from "@/store/user-store";
 
 export default {
   userStore,
-  data() {
-    return {
-      email: "",
-      password: ""
-    };
-  },
-  methods: {
-    async logIn() {
+  setup() {
+    const email = ref("");
+    const password = ref("");
+    const router = useRouter();
+
+    const logIn = async () => {
       try {
         const res = await axios.post("/auth/log-in", {
-          email: this.email,
-          password: this.password,
+          email: email.value,
+          password: password.value,
         });
         const user = res.data.user;
         const state = userStore.state;
@@ -36,11 +36,17 @@ export default {
         state.isAdmin = user.isAdmin;
         state.email = user.email;
         state.phoneNumber = user.phoneNumber;
-        this.$router.push({ path: '/' });
+        router.push({ path: "/" });
       } catch (err) {
         console.error(err);
       }
-    },
+    };
+
+    return {
+      email,
+      password,
+      logIn,
+    };
   },
 };
 </script>

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { ref, computed, onMounted } from "vue";
 import cartStore from "@/store/cart-store";
 import userStore from "@/store/user-store";
 
@@ -26,24 +27,19 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      prevImg: "",
-    };
-  },
-  computed: {
-    isAuth() {
-      return userStore.getters.isAuth;
-    },
-  },
-  mounted() {
-    let binary = "";
-    let bytes = [].slice.call(new Uint8Array(this.product.img.data));
-    bytes.forEach((b) => (binary += String.fromCharCode(b)));
-    this.prevImg = binary;
-  },
-  methods: {
-    inCart(prod) {
+  setup(props) {
+    const prevImg = ref("");
+
+    onMounted(() => {
+      let binary = "";
+      let bytes = [].slice.call(new Uint8Array(props.product.img.data));
+      bytes.forEach((b) => (binary += String.fromCharCode(b)));
+      prevImg.value = binary;
+    });
+
+    const isAuth = computed(() => userStore.getters.isAuth);
+
+    const inCart = (prod) => {
       const store = cartStore.state;
       let product = {
         id: prod.id,
@@ -69,7 +65,13 @@ export default {
         store.order.push({ id: prod.id, quantity: 1 });
         store.products.push(product);
       }
-    },
+    };
+
+    return {
+      prevImg,
+      isAuth,
+      inCart,
+    };
   },
 };
 </script>

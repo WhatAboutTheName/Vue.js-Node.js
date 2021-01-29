@@ -5,26 +5,29 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent, onMounted, ref } from "vue";
 import axios from "axios";
 const ProductTemplate = defineAsyncComponent(() => import("./product-template"));
 
 export default {
-  data() {
-    return {
-      products: [],
-    };
-  },
   components: {
     ProductTemplate,
   },
-  mounted() {
-    axios
-      .get("/user/get-product")
-      .then((res) => {
-        this.products = res.data.products;
-      })
-      .catch((err) => console.error(err));
+  setup() {
+    const products = ref([]);
+
+    onMounted(async () => {
+      try {
+        const res = await axios.get("/user/get-product");
+        products.value = res.data.products.map((el) => el);
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    return {
+      products,
+    };
   },
 };
 </script>

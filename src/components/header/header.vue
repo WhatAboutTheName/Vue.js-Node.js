@@ -24,16 +24,18 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import userStore from "@/store/user-store";
 
 export default {
-  computed: {
-    isAuth() {
-      return userStore.getters.isAuth;
-    },
-    isAdmin() {
-      return userStore.getters.isAdmin;
-    },
+  setup() {
+    const isAuth = computed(() => userStore.getters.isAuth);
+    const isAdmin = computed(() => userStore.getters.isAdmin);
+
+    return {
+      isAuth,
+      isAdmin,
+    };
   },
 };
 </script>

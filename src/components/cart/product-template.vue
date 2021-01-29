@@ -28,13 +28,17 @@ export default {
       required: true,
     },
   },
-  methods: {
-    Delete(id) {
+  setup() {
+    const Delete = (id) => {
       const dataProducts = cartStore.state.products.filter((el) => el.id !== id);
       const dataOrder = cartStore.state.order.filter((el) => el.id !== id);
       cartStore.state.products = dataProducts;
       cartStore.state.order = dataOrder;
-    },
+    };
+
+    return {
+      Delete,
+    };
   },
 };
 </script>
